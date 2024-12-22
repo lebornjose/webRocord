@@ -1,11 +1,12 @@
 {
-  "name": "rocord",
+  "name": "application",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "pnpm -F application dev",
-    "app:dev": "pnpm -F application dev"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "vue": "^3.5.13"
