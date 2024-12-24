@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "dev": "pnpm -r dev",
+    "dev": "pnpm -F application dev",
     "build": "pnpm -r build",
     "install:all": "pnpm install"
   },
