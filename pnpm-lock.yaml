@@ -19,6 +19,19 @@ importers:
         specifier: ^6.0.1
         version: 6.0.3
 
+  package/application:
+    dependencies:
+      vue:
+        specifier: ^3.5.13
+        version: 3.5.13
+    devDependencies:
+      '@vitejs/plugin-vue':
+        specifier: ^5.2.1
+        version: 5.2.1(vite@6.0.3)(vue@3.5.13)
+      vite:
+        specifier: ^6.0.1
+        version: 6.0.3
+
 packages:
 
   '@babel/helper-string-parser@7.25.9':
@@ -332,7 +345,7 @@ packages:
     hasBin: true
 
   estree-walker@2.0.2:
-    resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
+    resolution: {integrity: sha1-UvAQF4wqTBF6d1fP6UKtt9LaTKw=}
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
