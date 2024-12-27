@@ -1,17 +1,11 @@
 {
-  "name": "rocord",
+  "name": "root",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "pnpm -F application dev",
-    "app:dev": "pnpm -F application dev"
-  },
-  "dependencies": {
-    "vue": "^3.5.13"
+    "build": "pnpm -r build",
+    "install:all": "pnpm install"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.1",
-    "vite": "^6.0.1"
   }
 }
