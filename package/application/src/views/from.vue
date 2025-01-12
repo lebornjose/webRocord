@@ -1,5 +1,6 @@
 <template>
-   <a-form :model="formState" :label-col="labelCol" :wrapper-col="wrapperCol">
+<div class="form-container">
+  <a-form :model="formState" :label-col="labelCol" :wrapper-col="wrapperCol">
     <a-form-item label="姓名">
       <a-input v-model:value="formState.name" />
     </a-form-item>
@@ -20,7 +21,9 @@
 
   <div class="bottom">
     <a-button type="primary">确定</a-button>
+    <a-button>取消</a-button>
   </div>
+</div>
 </template>
 
 <script lang="ts" setup>
@@ -41,6 +44,16 @@ const formState = ref<{
 });
 </script>
 <style lang="less" scope>
+.form-container{
+  width: 660px;
+  margin: 0 auto;
+  .bottom{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+}
 :deep(.ant-form-item) {
   display: flex;
 }
