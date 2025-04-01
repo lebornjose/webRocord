@@ -2,10 +2,15 @@
 </script>
 
 <template>
-  <router-view></router-view>
+  <div class="app">
+    <router-view></router-view>
+  </div>
 </template>
 
 <style scoped>
+.app{
+  background-color: #fff;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
