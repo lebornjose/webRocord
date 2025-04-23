@@ -14,6 +14,11 @@
 - rrweb-snapshot: rrweb 的截图库
 - rrweb-replay: rrweb 的回放库
 
+
+## demo 地址
+
+http://localhost:5173/#/from
+
 ### 项目运行
 
 ```bash

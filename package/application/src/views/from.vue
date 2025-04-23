@@ -1,9 +1,9 @@
 <template>
 <div class="form-container">
   <div class="interaction rr-block">
-        <a-button type="primary" @click="recordPlay">录制</a-button>
-        <a-button type="success" @click="replay">回放</a-button>
-        <a-button type="warning" @click="reset">返回演示</a-button>
+        <a-button type="primary" :disabled="isRecord" @click="recordPlay">{{ isRecord ? '录制中...' : '录制' }}</a-button>
+        <a-button type="primary" success @click="replay">回放</a-button>
+        <a-button type="primary" danger @click="reset">返回演示</a-button>
    </div>
   <a-form :model="formState" :label-col="labelCol" :wrapper-col="wrapperCol">
     <a-form-item label="姓名">
@@ -40,6 +40,7 @@ import { message } from 'ant-design-vue';
 import { record, getRecordConsolePlugin, getReplayConsolePlugin } from 'rrweb'
 import rrwebPlayer from 'rrweb-player'
 
+const isRecord = ref(false)
 const eventsMatrix = ref([[]])  // 使用二维数组来存放多个 event 数组
 const replayer = ref(null)
 const wrapperCol = { span: 14 };
@@ -54,6 +55,7 @@ const stopFn = ref(null)
 
 const recordPlay = () => {
   console.log('录制');
+  isRecord.value = true
   stopFn.value = record({
     checkoutEveryNth: 100, // 每 100 个 event 重新制作快照
     emit(event, isCheckout) {
@@ -78,6 +80,7 @@ const recordPlay = () => {
   });
 }
 const replay = () => {
+  isRecord.value = false
   console.log('最近的操作记录: ', JSON.stringify(eventsMatrix.value[eventsMatrix.value.length - 1]));
   if(eventsMatrix.value[eventsMatrix.value.length - 1].length<=0) {
     return message.error("请先点击录制按钮进行录制！");
@@ -111,18 +114,21 @@ const reset = () => {
 
 </script>
 <style lang="less" scope>
-.replayer-wrapper{
-  position: absolute;
-  top: -40%;
-  left: 20%;
-  width: 60%;
-  height: 100%;
-}
+// .replayer-wrapper{
+//   position: absolute;
+//   top: -40%;
+//   left: 20%;
+//   width: 60%;
+//   height: 100%;
+// }
 .form-container{
   width: 660px;
   margin: 0 auto;
   .interaction{
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 12px
   }
   .bottom{
     display: flex;
@@ -139,5 +145,16 @@ const reset = () => {
 }
 .ant-form-item-control-input-content{
   text-align: left;
+}
+
+.replay-container{
+  position: absolute;
+  top: 0;
+  left: 0;
+  .rr-player{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
 }
 </style>
