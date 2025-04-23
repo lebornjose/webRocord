@@ -3,6 +3,7 @@ import 'ant-design-vue/dist/reset.css';
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router'; // 引入 router
+import 'rrweb-player/dist/style.css';
 import './style.css';
 
 
