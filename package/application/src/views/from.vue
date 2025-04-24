@@ -24,9 +24,8 @@
     </a-form-item>
   </a-form>  
   
-
   <div class="bottom">
-    <a-button type="primary" @click="onSubmit">打印表单数据</a-button>
+    <!-- <a-button type="primary" @click="onSubmit">打印表单数据</a-button> -->
     <a-button type="primary" danger @click="logError">手动抛错</a-button>
   </div>
 
@@ -102,14 +101,13 @@ const replay = () => {
   console.log('回放');
 }
 
-const onSubmit = () => {
-      console.log(JSON.stringify(this.form))
-}
 const logError = () => {
   throw new Error('手动抛错')
 }
 const reset = () => {
   console.log('返回演示');
+  isRecord.value = false
+  location.reload
 }
 
 </script>
