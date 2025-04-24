@@ -19,6 +19,11 @@
 
 http://localhost:5173/#/from
 
+
+## 参考项目
+rrweb-to-mp4 [https://github.com/jianming1999/rrweb-to-mp4]
+
+
 ### 项目运行
 
 ```bash
