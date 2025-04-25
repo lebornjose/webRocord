@@ -62,19 +62,20 @@ const recordPlay = () => {
         if (isCheckout) {
             eventsMatrix.value.push([]);
         }
+          // 将事件添加到最新的事件数组中
         const lastEvents = eventsMatrix.value[eventsMatrix.value.length - 1];
         lastEvents.push(event);
     },
     // 定制的选项
     plugins: [getRecordConsolePlugin({
-            level: ["info", "log", "warn", "error"],
-            lengthThreshold: 10000,
-            stringifyOptions: {
-            stringLengthLimit: 1000,
-            numOfKeysLimit: 100,
-            depthOfLimit: 1
+            level: ["info", "log", "warn", "error"], // 记录这些级别的日志
+            lengthThreshold: 10000,  // 日志长度阈值
+            stringifyOptions: { // 日志序列化选项
+            stringLengthLimit: 1000, // 字符串长度限制
+            numOfKeysLimit: 100,   // 对象键数量限制
+            depthOfLimit: 1   // 对象深度限制
         },
-        logger: window.console,
+        logger: window.console, // 使用浏览器的console对象
     })],
   });
 }
@@ -112,13 +113,6 @@ const reset = () => {
 
 </script>
 <style lang="less" scope>
-// .replayer-wrapper{
-//   position: absolute;
-//   top: -40%;
-//   left: 20%;
-//   width: 60%;
-//   height: 100%;
-// }
 .form-container{
   width: 660px;
   margin: 0 auto;
