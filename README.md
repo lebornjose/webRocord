@@ -13,6 +13,7 @@
 - rrweb-player: rrweb 的播放器组件
 - rrweb-snapshot: rrweb 的截图库
 - rrweb-replay: rrweb 的回放库
+- webm-writer-js [https://github.com/thenickdude/webm-writer-js]
 
 
 ## demo 地址
