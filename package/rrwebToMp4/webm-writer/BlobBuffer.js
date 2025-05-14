@@ -1,6 +1,6 @@
 "use strict";
 
-const Blob = require('node-blob');
+const Blob = global.Blob || require('blob-polyfill');
 
 /**
  * Allows a series of Blob-convertible objects (ArrayBuffer, Blob, String, etc) to be added to a buffer. Seeking and

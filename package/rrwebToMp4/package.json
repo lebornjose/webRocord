@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup -c",
-    "test": "node test/index.js"
+    "test": "node test/index.js",
+    "postinstall": "node node_modules/puppeteer/install.js || echo 'Puppeteer installation skipped'",
+    "macos": "node run-on-macos.js",
+    "update-puppeteer": "npm uninstall puppeteer && npm install puppeteer@latest",
+    "fix-macos": "node macos-fix.js && npm run test"
   },
   "author": "lebornjose",
   "license": "ISC",
@@ -15,10 +19,11 @@
     "multer": "^1.4.3",
     "node-blob": "0.0.2",
     "progress": "^2.0.3",
-    "puppeteer": "^5.5.0",
+    "puppeteer": "^13.7.0",
     "zlib": "^1.0.5"
   },
   "devDependencies": {
     "rollup": "^2.35.1"
-  }
+  },
+  "puppeteerSkipChromiumDownload": true
 }
