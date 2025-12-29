@@ -145,8 +145,9 @@ const reset = () => {
   left: 0;
   .rr-player{
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 10vh;
+    left: 20vw;
+    border: 1px solid #000;
   }
 }
 </style>
