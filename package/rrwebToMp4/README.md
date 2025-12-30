@@ -4,8 +4,16 @@ Convert rrweb recording data to MP4 video.
 
 ## Prerequisites
 
-- Node.js
-- Chrome or Chromium-based browser (Google Chrome, Microsoft Edge, Brave, etc.)
+- Node.js 18+
+- Puppeteer 13.7.0+ (已升级，支持 macOS ARM64)
+
+## 重要说明
+
+**Puppeteer 版本要求：**
+- ✅ 使用 Puppeteer 13.7.0+ 版本（已配置）
+- ❌ 不要使用 5.5 版本（不支持 Apple Silicon/ARM64 Mac，会报错无法打开浏览器）
+
+Puppeteer 13.7.0+ 会自动下载适配的 Chromium 浏览器，无需手动安装 Chrome。
 
 ## Installation
 
@@ -13,51 +21,36 @@ Convert rrweb recording data to MP4 video.
 npm install
 ```
 
+安装时 Puppeteer 会自动下载适配你系统的 Chromium 浏览器。
+
 ## Usage
 
-### Standard Usage
-
 ```bash
+# 构建
 npm run build
-npm test
+
+# 测试/运行
+npm run test
 ```
-
-### For macOS Users (especially Apple Silicon/M1/M2/M3)
-
-If you're encountering the following error:
-
-```
-Error: Failed to launch the browser process! spawn /usr/bin/chromium-browser ENOENT
-```
-
-This is due to Puppeteer not finding the expected Chrome executable on your system. macOS users (especially on Apple Silicon) should use the following command to run the application:
-
-```bash
-npm run macos
-```
-
-This script will:
-1. Find an installed Chromium-based browser on your system
-2. Configure Puppeteer to use that browser
-3. Launch the application with the correct settings
 
 ## Troubleshooting
 
-### Chrome/Chromium Not Found
+### 如果 Puppeteer 下载 Chromium 失败
 
-Make sure you have one of the following browsers installed:
-- Google Chrome
-- Google Chrome Canary
-- Chromium
-- Microsoft Edge
-- Brave Browser
+可以手动设置使用系统已安装的 Chrome：
 
-### Manual Configuration
+```javascript
+// 在 src/index.js 中的 launch 方法添加：
+this.browser = await puppeteer.launch({
+  executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  ignoreHTTPSErrors: true,
+  args: [...]
+})
+```
 
-If needed, you can manually set the Puppeteer executable path:
+### 旧版本迁移说明
 
-```bash
-PUPPETEER_EXECUTABLE_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" node index.js
-``` 
-
-### puppteer 需要 13 以上版本， 5.5 版本会报错，无法打开浏览器
+如果从旧版本（Puppeteer 5.5）升级过来：
+1. 删除 `node_modules` 目录
+2. 运行 `npm install` 重新安装依赖
+3. Puppeteer 会自动下载正确的 Chromium 版本
