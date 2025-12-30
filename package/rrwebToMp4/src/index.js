@@ -11,21 +11,29 @@ class Manager {
   }
   async launch () {
     console.log('启动无头浏览器')
-    this.browser = await puppeteer.launch({
+    
+    const launchOptions = {
       ignoreHTTPSErrors: true,
-      // headless: false,
-      // devtools: true,
+      headless: true,
       args: [
-        '-–disable-gpu',
-        '-–disable-dev-shm-usage',
-        '–-disable-setuid-sandbox',
-        '–-no-first-run',
-        '–-no-sandbox',
-        '–-no-zygote',
-        '–-single-process',
-        '--enable-experimental-web-platform-features'
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--disable-gpu'
       ]
-    })
+    };
+    
+    // 如果 Puppeteer 的 Chromium 没有下载，使用系统 Chrome
+    const fs = require('fs');
+    const systemChrome = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+    if (fs.existsSync(systemChrome)) {
+      launchOptions.executablePath = systemChrome;
+      console.log('使用系统 Chrome:', systemChrome);
+    }
+    
+    this.browser = await puppeteer.launch(launchOptions);
     return this.browser
   }
   async newPage (events, options) {
