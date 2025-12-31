@@ -1,56 +1,91 @@
 # rrweb-to-mp4
 
-Convert rrweb recording data to MP4 video.
+将 rrweb 录制数据转换为视频文件（WebM 格式）
 
-## Prerequisites
+## ✅ 已修复 macOS 兼容性
+
+- ✅ 支持 Apple Silicon (M1/M2/M3)
+- ✅ Puppeteer 13.7.0+
+- ✅ 自动使用系统 Chrome
+- ✅ WebM 输出（稳定可靠）
+
+## 🚀 快速开始
+
+```bash
+# 安装依赖
+npm install
+
+# 运行测试
+npm test
+```
+
+## 📋 系统要求
 
 - Node.js 18+
-- Puppeteer 13.7.0+ (已升级，支持 macOS ARM64)
+- Google Chrome (macOS 会自动使用系统安装的 Chrome)
 
-## 重要说明
+## 🎬 工作原理
 
-**Puppeteer 版本要求：**
-- ✅ 使用 Puppeteer 13.7.0+ 版本（已配置）
-- ❌ 不要使用 5.5 版本（不支持 Apple Silicon/ARM64 Mac，会报错无法打开浏览器）
+1. Puppeteer 启动无头 Chrome
+2. 回放 rrweb 录制的事件
+3. 逐帧截图
+4. 使用 WebM Writer 生成视频
+5. 保存到 `public/upload/webm/`
 
-Puppeteer 13.7.0+ 会自动下载适配的 Chromium 浏览器，无需手动安装 Chrome。
+## ⚙️ 配置
 
-## Installation
-
-```bash
-npm install
-```
-
-安装时 Puppeteer 会自动下载适配你系统的 Chromium 浏览器。
-
-## Usage
-
-```bash
-# 构建
-npm run build
-
-# 测试/运行
-npm run test
-```
-
-## Troubleshooting
-
-### 如果 Puppeteer 下载 Chromium 失败
-
-可以手动设置使用系统已安装的 Chrome：
+视频参数在 `replay.html` 中配置：
 
 ```javascript
-// 在 src/index.js 中的 launch 方法添加：
-this.browser = await puppeteer.launch({
-  executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-  ignoreHTTPSErrors: true,
-  args: [...]
-})
+let config = {
+  fps: 50  // 帧率，可根据需要调整 (30-60 推荐)
+};
 ```
 
-### 旧版本迁移说明
+## 📦 输出格式
 
-如果从旧版本（Puppeteer 5.5）升级过来：
-1. 删除 `node_modules` 目录
-2. 运行 `npm install` 重新安装依赖
-3. Puppeteer 会自动下载正确的 Chromium 版本
+- **视频格式**: WebM (标准格式，所有现代浏览器支持)
+- **输出路径**: `public/upload/webm/*.webm`
+
+## 🔧 升级说明
+
+### 从 Puppeteer 5.5 升级
+
+如果之前使用 Puppeteer 5.5.0：
+
+1. 已升级到 13.7.0 (支持 ARM64)
+2. 已移除不兼容的 Chrome 参数
+3. 已切换到稳定的 WebM 编码器
+
+### 为什么使用 WebM 而不是 MP4？
+
+- WebM Writer 纯 JavaScript 实现，更稳定
+- H264 WASM 编码器在无头 Chrome 中不稳定
+- WebM 是开放标准，所有浏览器支持
+- 如需 MP4，可使用 ffmpeg 后端转换
+
+## 📚 更多信息
+
+详细说明请查看 [PROJECT_INFO.md](./PROJECT_INFO.md)
+
+## 🐛 故障排除
+
+### Chrome 启动失败
+
+确保已安装 Google Chrome:
+```bash
+ls -la "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+```
+
+### npm 权限问题
+
+使用临时缓存目录:
+```bash
+npm install --cache /tmp/npm-cache --prefer-online
+```
+
+## 📝 版本历史
+
+- **v1.0.0**: 基础功能，Puppeteer 5.5.0
+- **v1.0.1**: 升级 Puppeteer 13.7.0，支持 ARM64
+- **v1.0.2**: 切换到 WebM 编码器，提高稳定性
