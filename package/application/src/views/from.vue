@@ -81,8 +81,16 @@ const recordPlay = () => {
 }
 const replay = () => {
   isRecord.value = false
-  console.log('最近的操作记录: ', JSON.stringify(eventsMatrix.value[eventsMatrix.value.length - 1]));
-  if(eventsMatrix.value[eventsMatrix.value.length - 1].length<=0) {
+  debugger
+  let content = eventsMatrix.value[eventsMatrix.value.length - 1];
+  if(localStorage.getItem('eventsMatrix')) {
+    content = JSON.parse(localStorage.getItem('eventsMatrix'));
+  }
+  // debugger
+  // const content = eventsMatrix.value[eventsMatrix.value.length - 1];
+  console.log('最近的操作记录: ', content);
+  localStorage.setItem('eventsMatrix', JSON.stringify(content));
+  if(content.length <= 0) {
     return message.error("请先点击录制按钮进行录制！");
   }
   stopFn.value()
@@ -91,7 +99,7 @@ const replay = () => {
         // 配置项
         props: {
           logConfig: true,
-          events: eventsMatrix.value[eventsMatrix.value.length - 1],
+          events: content,
           plugins: [
             getReplayConsolePlugin({
                 level: ['info', 'log', 'warn', 'error'],
