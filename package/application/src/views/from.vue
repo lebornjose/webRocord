@@ -1,8 +1,16 @@
 <template>
 <div class="form-container">
   <div class="interaction rr-block">
-        <a-button type="primary" :disabled="isRecord" @click="recordPlay">{{ isRecord ? '录制中...' : '录制' }}</a-button>
-        <a-button type="primary" success @click="replay">回放</a-button>
+        <a-button type="primary" :disabled="isRecord" @click="recordPlay">
+          {{ isRecord ? '录制中...' : '录制' }}
+        </a-button>
+        <a-button type="primary" success @click="replay">本地回放</a-button>
+        <a-button type="primary" :loading="isSaving" @click="saveToServer">
+          保存到服务器
+        </a-button>
+        <a-button v-if="currentRecordingId" @click="openServerPlayback">
+          查看服务器回放
+        </a-button>
         <a-button type="primary" danger @click="reset">返回演示</a-button>
    </div>
   <a-form :model="formState" :label-col="labelCol" :wrapper-col="wrapperCol">
@@ -38,10 +46,13 @@ import { ref } from 'vue'
 import { message } from 'ant-design-vue';
 import { record, getRecordConsolePlugin, getReplayConsolePlugin } from 'rrweb'
 import rrwebPlayer from 'rrweb-player'
+import RecordingAPI from '../api/recording'
 
 const isRecord = ref(false)
 const eventsMatrix = ref([[]])  // 使用二维数组来存放多个 event 数组
 const replayer = ref(null)
+const isSaving = ref(false)
+const currentRecordingId = ref(null)
 const wrapperCol = { span: 14 };
 const labelCol = { style: { width: '150px' } };
 const formState = ref({
@@ -118,6 +129,55 @@ const logError = () => {
   }
   throw new Error('手动抛错')
 }
+
+// 保存到服务器
+const saveToServer = async () => {
+  let content = eventsMatrix.value[eventsMatrix.value.length - 1];
+  
+  if (content.length <= 0) {
+    return message.error("请先点击录制按钮进行录制！");
+  }
+
+  // 停止录制（如果还在录制中）
+  if (isRecord.value && stopFn.value) {
+    stopFn.value();
+    isRecord.value = false;
+  }
+
+  isSaving.value = true;
+
+  try {
+    // 获取所有事件（扁平化）
+    const allEvents = eventsMatrix.value.flat();
+    
+    const result = await RecordingAPI.saveRecording(allEvents, {
+      title: `表单操作录制 - ${new Date().toLocaleString('zh-CN')}`,
+      description: `姓名: ${formState.value.name || '未填写'}, 爱好: ${formState.value.type.length} 项`,
+      tags: ['表单', '用户操作']
+    });
+
+    if (result.success) {
+      currentRecordingId.value = result.recordingId;
+      message.success(`保存成功！录制 ID: ${result.recordingId}`);
+      console.log('✅ 保存成功:', result);
+    }
+  } catch (error) {
+    console.error('❌ 保存失败:', error);
+    message.error('保存失败: ' + error.message);
+  } finally {
+    isSaving.value = false;
+  }
+}
+
+// 打开服务器回放
+const openServerPlayback = () => {
+  if (!currentRecordingId.value) {
+    message.warning('没有可回放的录制');
+    return;
+  }
+  RecordingAPI.openPlayback(currentRecordingId.value);
+}
+
 const reset = () => {
   console.log('返回演示');
   isRecord.value = false
