@@ -18,7 +18,8 @@ webRocord/
 ├── package/
 │   ├── application/      # 前端应用 (Vue 3 + Vite)
 │   ├── rrweb/           # rrweb 封装包
-│   └── rrwebToMp4/      # 视频转换服务 (Puppeteer + WebM)
+│   ├── rrwebToMp4/      # 视频转换服务 (Puppeteer + WebM)
+│   └── server/          # 录制数据存储服务端 (Express) ✨ 新增
 ```
 
 ## 🚀 快速开始
@@ -39,10 +40,15 @@ npm install --cache /tmp/npm-cache-rrweb --prefer-online
 # 视频转换服务
 cd ../rrwebToMp4
 npm install --cache /tmp/npm-cache-mp4 --prefer-online
+
+# 录制数据存储服务端 ✨ 新增
+cd ../server
+npm install --cache /tmp/npm-cache-server --prefer-online
 ```
 
 ### 启动开发服务器
 
+**启动前端应用：**
 ```bash
 # 在项目根目录
 npm run dev
@@ -51,8 +57,20 @@ npm run dev
 cd package/application
 npm run dev
 ```
-
 访问 http://localhost:5173/
+
+**启动后端服务器：** ✨ 新增
+```bash
+# 在项目根目录
+npm run dev:server
+
+# 或
+cd package/server
+npm run dev
+# 或
+./start.sh
+```
+服务器将在 http://localhost:3000 启动
 
 ## 📱 应用页面
 
@@ -90,6 +108,14 @@ npm test
 - **Express** - Web 服务器
 - **WebM Writer** - 视频编码
 - **Multer** - 文件上传
+
+### 录制数据服务端 (server) ✨ 新增
+- **Express 4.18** - Web 框架
+- **CORS** - 跨域支持
+- **Body Parser** - 请求体解析
+- **UUID** - 唯一 ID 生成
+- **Morgan** - HTTP 日志
+- **Compression** - 响应压缩
 
 ## 📝 项目依赖
 

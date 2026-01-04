@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "pnpm -F application dev",
-    "build": "pnpm -r build",
+    "dev:server": "cd package/server && npm run dev",
+    "build": "pnpm -r application build",
     "install:all": "pnpm install"
   },
   "devDependencies": {
