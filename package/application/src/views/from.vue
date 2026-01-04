@@ -81,19 +81,21 @@ const recordPlay = () => {
 }
 const replay = () => {
   isRecord.value = false
-  debugger
   let content = eventsMatrix.value[eventsMatrix.value.length - 1];
-  if(localStorage.getItem('eventsMatrix')) {
+  if(content.length ) {
+    localStorage.setItem('eventsMatrix', JSON.stringify(content));
+  }
+  if(!localStorage.getItem('eventsMatrix') || !content.length) {
     content = JSON.parse(localStorage.getItem('eventsMatrix'));
   }
-  // debugger
-  // const content = eventsMatrix.value[eventsMatrix.value.length - 1];
   console.log('最近的操作记录: ', content);
-  localStorage.setItem('eventsMatrix', JSON.stringify(content));
+  
   if(content.length <= 0) {
     return message.error("请先点击录制按钮进行录制！");
   }
-  stopFn.value()
+  if(stopFn?.value !== null && stopFn?.value !== undefined) {
+    stopFn.value()
+  }
   new rrwebPlayer({
         target: replayer.value, // 可以自定义 DOM 元素
         // 配置项
@@ -111,6 +113,9 @@ const replay = () => {
 }
 
 const logError = () => {
+  if(stopFn?.value !== null && stopFn?.value !== undefined) {
+    stopFn.value()
+  }
   throw new Error('手动抛错')
 }
 const reset = () => {
