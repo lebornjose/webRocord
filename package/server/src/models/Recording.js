@@ -47,30 +47,26 @@ const recordingSchema = new mongoose.Schema({
       type: Number,
       default: 0
     },
-    lastViewedAt: Date
   },
-  
   // 状态
   status: {
     type: String,
     enum: ['active', 'archived', 'deleted'],
     default: 'active',
     index: true
+  },
+  // 创建时间
+  createdAt: {
+    // 秒级时间戳
+    type: Number,
+    default: () => Math.floor(Date.now() / 1000)
   }
-}, {
-  timestamps: true, // 自动添加 createdAt 和 updatedAt
-  collection: 'recordings'
 });
 
 // 索引
-recordingSchema.index({ 'metadata.recordedAt': -1 });
 recordingSchema.index({ 'metadata.title': 'text' });
 recordingSchema.index({ 'metadata.tags': 1 });
 
-// 虚拟字段：格式化的录制时间
-recordingSchema.virtual('formattedRecordedAt').get(function() {
-  return this.metadata.recordedAt.toLocaleString('zh-CN');
-});
 
 // 实例方法：增加查看次数
 recordingSchema.methods.incrementViewCount = function() {

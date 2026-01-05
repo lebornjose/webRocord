@@ -127,6 +127,7 @@ const logError = () => {
   if(stopFn?.value !== null && stopFn?.value !== undefined) {
     stopFn.value()
   }
+  saveToServer();
   throw new Error('手动抛错')
 }
 
