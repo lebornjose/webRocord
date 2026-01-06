@@ -180,10 +180,12 @@ let config = {
 - [rrweb](https://github.com/rrweb-io/rrweb)
 - [rrweb-to-mp4](https://github.com/jianming1999/rrweb-to-mp4)
 
+## 📸 截图
+
+![系统截图1](https://chrome1.oss-cn-shanghai.aliyuncs.com/1.png)
+
+![系统截图2](https://chrome1.oss-cn-shanghai.aliyuncs.com/2.png)
+
 ## 📄 License
 
 ISC
-
-## 截图
-[https://chrome1.oss-cn-shanghai.aliyuncs.com/1.png]
-[https://chrome1.oss-cn-shanghai.aliyuncs.com/2.png]
