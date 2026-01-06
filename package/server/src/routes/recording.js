@@ -89,17 +89,7 @@ router.get('/list', async (req, res) => {
 
     res.json({
       success: true,
-      data: recordings.map(r => ({
-        id: r.recordingId,
-        title: r.metadata.title,
-        recordedAt: r.metadata.recordedAt,
-        eventCount: r.metadata.eventCount,
-        duration: r.metadata.duration,
-        tags: r.metadata.tags,
-        viewCount: r.stats.viewCount,
-        createdAt: r.createdAt,
-        updatedAt: r.updatedAt
-      })),
+      data: recordings, // 返回完整的 Recording 对象
       pagination: {
         total,
         page: parseInt(page),
@@ -111,6 +101,7 @@ router.get('/list', async (req, res) => {
   } catch (error) {
     console.error('Error listing recordings:', error);
     res.status(500).json({
+      success: false,
       error: 'Failed to list recordings',
       message: error.message
     });
@@ -124,6 +115,7 @@ router.get('/search', async (req, res) => {
 
     if (!q) {
       return res.status(400).json({
+        success: false,
         error: 'Search query is required'
       });
     }
@@ -136,13 +128,7 @@ router.get('/search', async (req, res) => {
 
     res.json({
       success: true,
-      data: recordings.map(r => ({
-        id: r.recordingId,
-        title: r.metadata.title,
-        recordedAt: r.metadata.recordedAt,
-        eventCount: r.metadata.eventCount,
-        duration: r.metadata.duration
-      })),
+      data: recordings, // 返回完整的 Recording 对象
       pagination: {
         total,
         page: parseInt(page),
@@ -154,6 +140,7 @@ router.get('/search', async (req, res) => {
   } catch (error) {
     console.error('Error searching recordings:', error);
     res.status(500).json({
+      success: false,
       error: 'Failed to search recordings',
       message: error.message
     });
@@ -293,31 +280,52 @@ router.delete('/:id', async (req, res) => {
 // 获取统计信息
 router.get('/stats/summary', async (req, res) => {
   try {
+    // 总录制数（活跃状态）
     const total = await Recording.countDocuments({ status: 'active' });
+    
+    // 总观看次数
     const totalViews = await Recording.aggregate([
       { $match: { status: 'active' } },
       { $group: { _id: null, total: { $sum: '$stats.viewCount' } } }
     ]);
 
-    const recentRecordings = await Recording.findRecent(5);
+    // 今日录制数（从今天 00:00 开始）
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayRecordings = await Recording.countDocuments({
+      status: 'active',
+      'metadata.recordedAt': { $gte: todayStart }
+    });
+
+    // 活跃录制数（最近7天有观看记录的）
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const activeRecordings = await Recording.countDocuments({
+      status: 'active',
+      'stats.lastViewedAt': { $gte: sevenDaysAgo }
+    });
+
+    // 最近录制（带完整信息）
+    const recentRecordings = await Recording.find({ status: 'active' })
+      .sort({ 'metadata.recordedAt': -1 })
+      .limit(10)
+      .select('-events'); // 不返回 events 数据
 
     res.json({
       success: true,
       data: {
         totalRecordings: total,
         totalViews: totalViews[0]?.total || 0,
-        recentRecordings: recentRecordings.map(r => ({
-          id: r.recordingId,
-          title: r.metadata.title,
-          recordedAt: r.metadata.recordedAt,
-          viewCount: r.stats.viewCount
-        }))
+        todayRecordings: todayRecordings,
+        activeRecordings: activeRecordings,
+        recentRecordings: recentRecordings
       }
     });
 
   } catch (error) {
     console.error('Error getting stats:', error);
     res.status(500).json({
+      success: false,
       error: 'Failed to get statistics',
       message: error.message
     });

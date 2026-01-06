@@ -183,3 +183,7 @@ let config = {
 ## 📄 License
 
 ISC
+
+## 截图
+[https://chrome1.oss-cn-shanghai.aliyuncs.com/1.png]
+[https://chrome1.oss-cn-shanghai.aliyuncs.com/2.png]

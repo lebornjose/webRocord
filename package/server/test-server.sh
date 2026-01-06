@@ -29,3 +29,4 @@ echo "查看服务器日志："
 echo "cat /tmp/server-output.log"
 
 
+
